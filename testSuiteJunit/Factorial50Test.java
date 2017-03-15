@@ -10,12 +10,19 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 
+/**
+ * As a user,
+ * I would like to see if the factorial text box correctly
+ * displays the output of the number "50".
+ * @author David Anderson
+ */
 public class Factorial50Test extends TestCase {
   private WebDriver driver;
   private String baseUrl;
   private boolean acceptNextAlert = true;
   private StringBuffer verificationErrors = new StringBuffer();
 
+  // Setup the homepage.
   @Before
   public void setUp() throws Exception {
     driver = new HtmlUnitDriver();
@@ -23,6 +30,8 @@ public class Factorial50Test extends TestCase {
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
+  // Test that using factorial 50 produces the correct output of
+  // 30414093201713378043612608166064768844377641568960512000000000000.
   @Test
   public void testFactorial50() throws Exception {
     driver.get(baseUrl + "/");
@@ -33,6 +42,7 @@ public class Factorial50Test extends TestCase {
     assertTrue(driver.findElement(By.cssSelector("h2")).getText().matches("^[\\s\\S]*30414093201713378043612608166064768844377641568960512000000000000[\\s\\S]*[\\s\\S]*$"));
   }
 
+   // Quit driver.
   @After
   public void tearDown() throws Exception {
     driver.quit();
@@ -42,6 +52,7 @@ public class Factorial50Test extends TestCase {
     }
   }
 
+  // Check if an element is present on the page.
   private boolean isElementPresent(By by) {
     try {
       driver.findElement(by);
@@ -50,7 +61,8 @@ public class Factorial50Test extends TestCase {
       return false;
     }
   }
-
+  
+  // Check if an alert is present on the page.
   private boolean isAlertPresent() {
     try {
       driver.switchTo().alert();
@@ -60,6 +72,7 @@ public class Factorial50Test extends TestCase {
     }
   }
 
+  // Close a specific alert and get it's text.
   private String closeAlertAndGetItsText() {
     try {
       Alert alert = driver.switchTo().alert();

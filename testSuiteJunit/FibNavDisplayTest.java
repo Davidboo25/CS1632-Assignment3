@@ -10,13 +10,21 @@ import org.openqa.selenium.support.ui.Select;
 import junit.framework.TestCase;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-
+/**
+ * As a user,
+ * I would like to see if the navigation on the Fibonacci page
+ * contains all the correct names. These are:
+ * "CS1632 D3 Home","Factorial","Fibonacci","Hello","Cathedral Pics"
+ * @author David Anderson
+ *
+ */
 public class FibNavDisplayTest extends TestCase{
   private WebDriver driver;
   private String baseUrl;
   private boolean acceptNextAlert = true;
   private StringBuffer verificationErrors = new StringBuffer();
 
+  //Setup the homepage
   @Before
   public void setUp() throws Exception {
     driver = new HtmlUnitDriver();
@@ -24,6 +32,8 @@ public class FibNavDisplayTest extends TestCase{
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
+  // I open the Fibonacci page from the homepage.
+  // Then, I check to see if each correct link is located somewhere on the webpage.
   @Test
   public void testFibNavDisplay() throws Exception {
     driver.get(baseUrl + "/fib");
@@ -34,6 +44,7 @@ public class FibNavDisplayTest extends TestCase{
     assertTrue(isElementPresent(By.linkText("Cathedral Pics")));
   }
 
+  // Close the driver
   @After
   public void tearDown() throws Exception {
     driver.quit();
@@ -43,6 +54,7 @@ public class FibNavDisplayTest extends TestCase{
     }
   }
 
+  // Check if an element is present on the page.
   private boolean isElementPresent(By by) {
     try {
       driver.findElement(by);
@@ -52,6 +64,7 @@ public class FibNavDisplayTest extends TestCase{
     }
   }
 
+  // Check if an alert is present on the page.
   private boolean isAlertPresent() {
     try {
       driver.switchTo().alert();
@@ -61,6 +74,7 @@ public class FibNavDisplayTest extends TestCase{
     }
   }
 
+  // Close an alert and get the text from it.
   private String closeAlertAndGetItsText() {
     try {
       Alert alert = driver.switchTo().alert();

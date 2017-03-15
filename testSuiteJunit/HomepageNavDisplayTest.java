@@ -9,13 +9,21 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-
+/**
+ * As a user,
+ * I would like to see if the navigation on the Home page
+ * contains all the correct names. These are:
+ * "CS1632 D3 Home","Factorial","Fibonacci","Hello","Cathedral Pics"
+ * @author David Anderson
+ *
+ */
 public class HomepageNavDisplayTest extends TestCase {
   private WebDriver driver;
   private String baseUrl;
   private boolean acceptNextAlert = true;
   private StringBuffer verificationErrors = new StringBuffer();
 
+  // Setup the homepage
   @Before
   public void setUp() throws Exception {
     driver = new HtmlUnitDriver();
@@ -23,6 +31,8 @@ public class HomepageNavDisplayTest extends TestCase {
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
+  // I open the Home page from the homepage.
+  // Then, I check to see if each correct link is located somewhere on the webpage.
   @Test
   public void testHomepageNavDisplay() throws Exception {
     driver.get(baseUrl + "/");
@@ -33,6 +43,7 @@ public class HomepageNavDisplayTest extends TestCase {
     assertTrue(isElementPresent(By.linkText("Cathedral Pics")));
   }
 
+  // Quit the driver
   @After
   public void tearDown() throws Exception {
     driver.quit();
@@ -41,7 +52,7 @@ public class HomepageNavDisplayTest extends TestCase {
       fail(verificationErrorString);
     }
   }
-
+  // Check if an element is present on the page.
   private boolean isElementPresent(By by) {
     try {
       driver.findElement(by);
@@ -51,6 +62,7 @@ public class HomepageNavDisplayTest extends TestCase {
     }
   }
 
+  // Check if an alert is present on the page.
   private boolean isAlertPresent() {
     try {
       driver.switchTo().alert();
@@ -60,6 +72,7 @@ public class HomepageNavDisplayTest extends TestCase {
     }
   }
 
+  // Close an alert and get the text from it.
   private String closeAlertAndGetItsText() {
     try {
       Alert alert = driver.switchTo().alert();

@@ -9,12 +9,22 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
+
+/**
+ * As a user,
+ * I would like to see if the navigation on the Hello page
+ * contains all the correct names. These are:
+ * "CS1632 D3 Home","Factorial","Fibonacci","Hello","Cathedral Pics"
+ * @author David Anderson
+ *
+ */
 public class HelloNavDisplayTest extends TestCase{
   private WebDriver driver;
   private String baseUrl;
   private boolean acceptNextAlert = true;
   private StringBuffer verificationErrors = new StringBuffer();
 
+  // Setup the homepage.
   @Before
   public void setUp() throws Exception {
     driver = new HtmlUnitDriver();
@@ -22,6 +32,8 @@ public class HelloNavDisplayTest extends TestCase{
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
+  // I open the hello page from the homepage.
+  // Then, I check to see if each link specified is located somewhere on the webpage.
   @Test
   public void testHelloNavDisplay() throws Exception {
     driver.get(baseUrl + "/hello");
@@ -32,6 +44,7 @@ public class HelloNavDisplayTest extends TestCase{
     assertTrue(isElementPresent(By.linkText("Cathedral Pics")));
   }
 
+  // Quit the driver.
   @After
   public void tearDown() throws Exception {
     driver.quit();
@@ -41,6 +54,7 @@ public class HelloNavDisplayTest extends TestCase{
     }
   }
 
+  // Check if a certain element exists on the page.
   private boolean isElementPresent(By by) {
     try {
       driver.findElement(by);
@@ -50,6 +64,7 @@ public class HelloNavDisplayTest extends TestCase{
     }
   }
 
+  // Check if there is an alert on the loaded page.
   private boolean isAlertPresent() {
     try {
       driver.switchTo().alert();
@@ -59,6 +74,7 @@ public class HelloNavDisplayTest extends TestCase{
     }
   }
 
+  // Close alert and get the text from it 
   private String closeAlertAndGetItsText() {
     try {
       Alert alert = driver.switchTo().alert();

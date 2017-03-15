@@ -10,13 +10,20 @@ import org.openqa.selenium.support.ui.Select;
 import junit.framework.TestCase;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-
+/**
+ * As a user,
+ * I would like to see if the Cathedral page contains
+ * Three images of the Cathedreal of Learning.
+ * @author David Anderson
+ *
+ */
 public class Cathy3CathyPictureTest extends TestCase {
   private WebDriver driver;
   private String baseUrl;
   private boolean acceptNextAlert = true;
   private StringBuffer verificationErrors = new StringBuffer();
 
+  // Setup the homepage.
   @Before
   public void setUp() throws Exception {
     driver = new HtmlUnitDriver();
@@ -24,6 +31,7 @@ public class Cathy3CathyPictureTest extends TestCase {
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
+  // Test to make sure that the three specific alt tages exist on an image on the page.
   @Test
   public void testCathy3CathyPicture() throws Exception {
     driver.get(baseUrl + "/");
@@ -32,7 +40,7 @@ public class Cathy3CathyPictureTest extends TestCase {
     assertTrue(isElementPresent(By.cssSelector("img[alt=\"Alpenglow Cathedral\"]")));
     assertTrue(isElementPresent(By.cssSelector("img[alt=\"Old Cathedral\"]")));
   }
-
+  // Quit driver.
   @After
   public void tearDown() throws Exception {
     driver.quit();
@@ -42,6 +50,7 @@ public class Cathy3CathyPictureTest extends TestCase {
     }
   }
 
+  // Check if an element is present on the page.
   private boolean isElementPresent(By by) {
     try {
       driver.findElement(by);
@@ -50,7 +59,8 @@ public class Cathy3CathyPictureTest extends TestCase {
       return false;
     }
   }
-
+  
+  // Check if an alert is present on the page.
   private boolean isAlertPresent() {
     try {
       driver.switchTo().alert();
@@ -60,6 +70,7 @@ public class Cathy3CathyPictureTest extends TestCase {
     }
   }
 
+  // Close a specific alert and get it's text.
   private String closeAlertAndGetItsText() {
     try {
       Alert alert = driver.switchTo().alert();

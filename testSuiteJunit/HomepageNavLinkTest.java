@@ -10,13 +10,22 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-
+/**
+ * As a user,
+ * I would like to see if the navigation on the Home page
+ * correctly links to each of the pages in it's navigation bar.
+ * The pages are:
+ * "CS1632 D3 Home","Factorial","Fibonacci","Hello","Cathedral Pics"
+ * @author David Anderson
+ *
+ */
 public class HomepageNavLinkTest extends TestCase {
   private WebDriver driver;
   private String baseUrl;
   private boolean acceptNextAlert = true;
   private StringBuffer verificationErrors = new StringBuffer();
 
+  // Setup the homepage.
   @Before
   public void setUp() throws Exception {
     driver = new HtmlUnitDriver();
@@ -24,6 +33,7 @@ public class HomepageNavLinkTest extends TestCase {
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
+  // Find each element based on the specificed link. Check if he url of that element is the correct one.
   @Test
   public void testHomepageNavLink() throws Exception {
     driver.get(baseUrl + "/");
@@ -44,6 +54,7 @@ public class HomepageNavLinkTest extends TestCase {
     driver.get(baseUrl + "/");
   }
 
+  // Quit driver.
   @After
   public void tearDown() throws Exception {
     driver.quit();
@@ -53,6 +64,7 @@ public class HomepageNavLinkTest extends TestCase {
     }
   }
 
+  // Check if an element is present on the page.
   private boolean isElementPresent(By by) {
     try {
       driver.findElement(by);
@@ -61,7 +73,8 @@ public class HomepageNavLinkTest extends TestCase {
       return false;
     }
   }
-
+  
+  // Check if an alert is present on the page.
   private boolean isAlertPresent() {
     try {
       driver.switchTo().alert();
@@ -71,6 +84,7 @@ public class HomepageNavLinkTest extends TestCase {
     }
   }
 
+  // Close a specific alert and get it's text.
   private String closeAlertAndGetItsText() {
     try {
       Alert alert = driver.switchTo().alert();

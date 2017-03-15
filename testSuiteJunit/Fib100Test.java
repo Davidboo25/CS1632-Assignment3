@@ -9,13 +9,19 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-
+/**
+ * As a user,
+ * I would like to see if the Fibonacci text box correctly
+ * displays the output of the number "100".
+ * @author David Anderson
+ */
 public class Fib100Test extends TestCase{
   private WebDriver driver;
   private String baseUrl;
   private boolean acceptNextAlert = true;
   private StringBuffer verificationErrors = new StringBuffer();
 
+  // Setup the homepage.
   @Before
   public void setUp() throws Exception {
     driver = new HtmlUnitDriver();
@@ -23,6 +29,8 @@ public class Fib100Test extends TestCase{
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
+  // Test that using Fibonacci 100 produces the correct output of
+  // 354224848179261915075.
   @Test
   public void testFib100() throws Exception {
     driver.get(baseUrl + "/");
@@ -33,6 +41,7 @@ public class Fib100Test extends TestCase{
     assertTrue(driver.findElement(By.cssSelector("h2")).getText().matches("^[\\s\\S]*354224848179261915075![\\s\\S]*$"));
   }
 
+    // Quit driver.
   @After
   public void tearDown() throws Exception {
     driver.quit();
@@ -42,6 +51,7 @@ public class Fib100Test extends TestCase{
     }
   }
 
+  // Check if an element is present on the page.
   private boolean isElementPresent(By by) {
     try {
       driver.findElement(by);
@@ -50,7 +60,8 @@ public class Fib100Test extends TestCase{
       return false;
     }
   }
-
+  
+  // Check if an alert is present on the page.
   private boolean isAlertPresent() {
     try {
       driver.switchTo().alert();
@@ -60,6 +71,7 @@ public class Fib100Test extends TestCase{
     }
   }
 
+  // Close a specific alert and get it's text.
   private String closeAlertAndGetItsText() {
     try {
       Alert alert = driver.switchTo().alert();

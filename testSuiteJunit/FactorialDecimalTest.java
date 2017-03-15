@@ -10,12 +10,19 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 
+/**
+ * As a user,
+ * I would like to see if the factorial text box correctly
+ * displays the output of a decimal number.
+ * @author David Anderson
+ */
 public class FactorialDecimalTest extends TestCase{
   private WebDriver driver;
   private String baseUrl;
   private boolean acceptNextAlert = true;
   private StringBuffer verificationErrors = new StringBuffer();
 
+  // Setup the homepage.
   @Before
   public void setUp() throws Exception {
     driver = new HtmlUnitDriver();
@@ -23,6 +30,9 @@ public class FactorialDecimalTest extends TestCase{
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
+  // Test that using factorial 1.5 produces the correct output of
+  // 1.
+  // This is due to it being outside the correct bounds.
   @Test
   public void testFactorialDecimal() throws Exception {
     driver.get(baseUrl + "/");
@@ -33,6 +43,7 @@ public class FactorialDecimalTest extends TestCase{
     assertTrue(driver.findElement(By.cssSelector("h2")).getText().matches("^[\\s\\S]*1![\\s\\S]*$"));
   }
 
+   // Quit driver.
   @After
   public void tearDown() throws Exception {
     driver.quit();
@@ -42,6 +53,7 @@ public class FactorialDecimalTest extends TestCase{
     }
   }
 
+  // Check if an element is present on the page.
   private boolean isElementPresent(By by) {
     try {
       driver.findElement(by);
@@ -50,7 +62,8 @@ public class FactorialDecimalTest extends TestCase{
       return false;
     }
   }
-
+  
+  // Check if an alert is present on the page.
   private boolean isAlertPresent() {
     try {
       driver.switchTo().alert();
@@ -60,6 +73,7 @@ public class FactorialDecimalTest extends TestCase{
     }
   }
 
+  // Close a specific alert and get it's text.
   private String closeAlertAndGetItsText() {
     try {
       Alert alert = driver.switchTo().alert();

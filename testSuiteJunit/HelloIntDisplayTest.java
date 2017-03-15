@@ -9,13 +9,20 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-
+/**
+ * As a user,
+ * I would like to see if the Hello page correctly
+ * displays the text, "Hello CS1632, from",
+ * and also an input integer from the navigation bar,
+ * "12345", on the page to the user.
+ */
 public class HelloIntDisplayTest extends TestCase{
   private WebDriver driver;
   private String baseUrl;
   private boolean acceptNextAlert = true;
   private StringBuffer verificationErrors = new StringBuffer();
 
+  // Setup the main website.
   @Before
   public void setUp() throws Exception {
     driver = new HtmlUnitDriver();
@@ -23,6 +30,9 @@ public class HelloIntDisplayTest extends TestCase{
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
+  // Test to see if the correct Hello output is displayed to the user. 
+  // Also test that if the user inputs an integer, 12345,  to the end of the address, 
+  // it is displayed correctly.
   @Test
   public void testHelloIntDisplay() throws Exception {
     driver.get(baseUrl + "/hello/12345");
@@ -30,6 +40,7 @@ public class HelloIntDisplayTest extends TestCase{
     assertTrue(driver.findElement(By.cssSelector("h2")).getText().matches("^[\\s\\S]*12345[\\s\\S]*$"));
   }
 
+    // Quit driver.
   @After
   public void tearDown() throws Exception {
     driver.quit();
@@ -39,6 +50,7 @@ public class HelloIntDisplayTest extends TestCase{
     }
   }
 
+  // Check if an element is present on the page.
   private boolean isElementPresent(By by) {
     try {
       driver.findElement(by);
@@ -47,7 +59,8 @@ public class HelloIntDisplayTest extends TestCase{
       return false;
     }
   }
-
+  
+  // Check if an alert is present on the page.
   private boolean isAlertPresent() {
     try {
       driver.switchTo().alert();
@@ -57,6 +70,7 @@ public class HelloIntDisplayTest extends TestCase{
     }
   }
 
+  // Close a specific alert and get it's text.
   private String closeAlertAndGetItsText() {
     try {
       Alert alert = driver.switchTo().alert();

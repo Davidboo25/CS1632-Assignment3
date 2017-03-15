@@ -9,13 +9,21 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-
+/**
+ * As a user,
+ * I would like to see if the navigation on the Cathedral page
+ * contains all the correct names. These are:
+ * "CS1632 D3 Home","Factorial","Fibonacci","Hello","Cathedral Pics"
+ * @author David Anderson
+ *
+ */
 public class CathyNavDisplayTest extends TestCase {
   private WebDriver driver;
   private String baseUrl;
   private boolean acceptNextAlert = true;
   private StringBuffer verificationErrors = new StringBuffer();
 
+  // Setup the home page.
   @Before
   public void setUp() throws Exception {
     driver = new HtmlUnitDriver();
@@ -23,6 +31,8 @@ public class CathyNavDisplayTest extends TestCase {
     driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
   }
 
+  // I open the Cathedral page from the homepage.
+  // Then, I check to see if each correct link is located somewhere on the webpage.
   @Test
   public void testCathyNavDisplay() throws Exception {
     driver.get(baseUrl + "/cathy");
@@ -33,6 +43,7 @@ public class CathyNavDisplayTest extends TestCase {
     assertTrue(isElementPresent(By.linkText("Cathedral Pics")));
   }
 
+   // Quit driver.
   @After
   public void tearDown() throws Exception {
     driver.quit();
@@ -42,6 +53,7 @@ public class CathyNavDisplayTest extends TestCase {
     }
   }
 
+  // Check if an element is present on the page.
   private boolean isElementPresent(By by) {
     try {
       driver.findElement(by);
@@ -50,7 +62,8 @@ public class CathyNavDisplayTest extends TestCase {
       return false;
     }
   }
-
+  
+  // Check if an alert is present on the page.
   private boolean isAlertPresent() {
     try {
       driver.switchTo().alert();
@@ -60,6 +73,7 @@ public class CathyNavDisplayTest extends TestCase {
     }
   }
 
+  // Close a specific alert and get it's text.
   private String closeAlertAndGetItsText() {
     try {
       Alert alert = driver.switchTo().alert();
