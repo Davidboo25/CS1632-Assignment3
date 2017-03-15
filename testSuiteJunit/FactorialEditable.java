@@ -11,9 +11,16 @@ import static org.junit.Assert.*;
 import java.util.regex.Pattern;
 import static org.apache.commons.lang3.StringUtils.join;
 
+/**
+ * As a user,
+ * I would like to see that the textbox on the factorial page is editable.
+ * @author David Anderson
+ *
+ */
 public class FactorialEditable {
 	private Selenium selenium;
-
+	
+	// Setup the webdriver for the desired website.	
 	@Before
 	public void setUp() throws Exception {
 		WebDriver driver = new FirefoxDriver();
@@ -21,12 +28,16 @@ public class FactorialEditable {
 		selenium = new WebDriverBackedSelenium(driver, baseUrl);
 	}
 
+	// Navigate to the Factorial page.
+	// Then verify that the input textbox is editable.
 	@Test
 	public void testFactorialEditable() throws Exception {
 		selenium.open("/");
-		assertTrue(selenium.getText("css=div.row > p.lead").matches("^[\\s\\S]*Used for CS1632 Software Quality Assurance, taught by Bill Laboon[\\s\\S]*$"));
-		assertTrue(selenium.getText("css=p.lead").matches("^[\\s\\S]*Welcome, friend,[\\s\\S]*$"));
-		assertTrue(selenium.getText("css=p.lead").matches("^[\\s\\S]*to a land of pure calculation\\.[\\s\\S]*$"));
+		// Navigate to the Factorial page.
+		selenium.click("link=Factorial");
+		selenium.waitForPageToLoad("30000");
+		// Verify that the textbox is editable.
+		assertTrue(selenium.isEditable("name=value"));
 	}
 
 	@After

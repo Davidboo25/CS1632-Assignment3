@@ -11,8 +11,17 @@ import static org.junit.Assert.*;
 import java.util.regex.Pattern;
 import static org.apache.commons.lang3.StringUtils.join;
 
+
+/**
+ * As a user,
+ * I would like to see that entering a string into the factorial textbox displays the correct output.
+ * @author David Anderson
+ *
+ */
 public class FactorialStringTest {
 	private Selenium selenium;
+
+	// Setup the webdriver for the desired website.
 
 	@Before
 	public void setUp() throws Exception {
@@ -21,17 +30,23 @@ public class FactorialStringTest {
 		selenium = new WebDriverBackedSelenium(driver, baseUrl);
 	}
 
+	// Navigate to the Factorial page.
+	// Then test that entering "jester" displays the correct
+	// output of 1! due to it being an incorrect input type.
 	@Test
 	public void testFactorialString() throws Exception {
 		selenium.open("/");
 		selenium.click("link=Factorial");
 		selenium.waitForPageToLoad("30000");
+		// Enter "jester" into the textbox and click submit.
 		selenium.type("name=value", "jester");
 		selenium.click("css=input[type=\"submit\"]");
 		selenium.waitForPageToLoad("30000");
+		// Verify that the output is correct.
 		assertTrue(selenium.getText("css=h2").matches("^[\\s\\S]*1![\\s\\S]*$"));
 	}
 
+	// End.
 	@After
 	public void tearDown() throws Exception {
 		selenium.stop();
