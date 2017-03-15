@@ -1,35 +1,74 @@
-package com.example.tests;
-
-import com.thoughtworks.selenium.Selenium;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.WebDriver;
-import com.thoughtworks.selenium.webdriven.WebDriverBackedSelenium;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import junit.framework.TestCase;
 import java.util.regex.Pattern;
-import static org.apache.commons.lang3.StringUtils.join;
+import java.util.concurrent.TimeUnit;
+import org.junit.*;
+import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-public class HelloIntDisplayTest {
-	private Selenium selenium;
 
-	@Before
-	public void setUp() throws Exception {
-		WebDriver driver = new FirefoxDriver();
-		String baseUrl = "https://cs1632ex.herokuapp.com/";
-		selenium = new WebDriverBackedSelenium(driver, baseUrl);
-	}
+public class HelloIntDisplayTest extends TestCase{
+  private WebDriver driver;
+  private String baseUrl;
+  private boolean acceptNextAlert = true;
+  private StringBuffer verificationErrors = new StringBuffer();
 
-	@Test
-	public void testHelloIntDisplay() throws Exception {
-		selenium.open("/hello/12345");
-		assertTrue(selenium.getText("css=h2").matches("^[\\s\\S]*Hello CS1632, from[\\s\\S]*$"));
-		assertTrue(selenium.getText("css=h2").matches("^[\\s\\S]*12345[\\s\\S]*$"));
-	}
+  @Before
+  public void setUp() throws Exception {
+    driver = new HtmlUnitDriver();
+    baseUrl = "https://cs1632ex.herokuapp.com/";
+    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+  }
 
-	@After
-	public void tearDown() throws Exception {
-		selenium.stop();
-	}
+  @Test
+  public void testHelloIntDisplay() throws Exception {
+    driver.get(baseUrl + "/hello/12345");
+    assertTrue(driver.findElement(By.cssSelector("h2")).getText().matches("^[\\s\\S]*Hello CS1632, from[\\s\\S]*$"));
+    assertTrue(driver.findElement(By.cssSelector("h2")).getText().matches("^[\\s\\S]*12345[\\s\\S]*$"));
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    driver.quit();
+    String verificationErrorString = verificationErrors.toString();
+    if (!"".equals(verificationErrorString)) {
+      fail(verificationErrorString);
+    }
+  }
+
+  private boolean isElementPresent(By by) {
+    try {
+      driver.findElement(by);
+      return true;
+    } catch (NoSuchElementException e) {
+      return false;
+    }
+  }
+
+  private boolean isAlertPresent() {
+    try {
+      driver.switchTo().alert();
+      return true;
+    } catch (NoAlertPresentException e) {
+      return false;
+    }
+  }
+
+  private String closeAlertAndGetItsText() {
+    try {
+      Alert alert = driver.switchTo().alert();
+      String alertText = alert.getText();
+      if (acceptNextAlert) {
+        alert.accept();
+      } else {
+        alert.dismiss();
+      }
+      return alertText;
+    } finally {
+      acceptNextAlert = true;
+    }
+  }
 }

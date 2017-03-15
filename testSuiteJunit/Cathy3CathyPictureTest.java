@@ -1,4 +1,4 @@
-import junit.framework.TestCase;
+
 import java.util.regex.Pattern;
 import java.util.concurrent.TimeUnit;
 import org.junit.*;
@@ -7,10 +7,11 @@ import static org.hamcrest.CoreMatchers.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
+import junit.framework.TestCase;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 
-public class Factorial2Test extends TestCase {
+public class Cathy3CathyPictureTest extends TestCase {
   private WebDriver driver;
   private String baseUrl;
   private boolean acceptNextAlert = true;
@@ -24,13 +25,12 @@ public class Factorial2Test extends TestCase {
   }
 
   @Test
-  public void testFactorial2() throws Exception {
+  public void testCathy3CathyPicture() throws Exception {
     driver.get(baseUrl + "/");
-    driver.findElement(By.linkText("Factorial")).click();
-    driver.findElement(By.name("value")).clear();
-    driver.findElement(By.name("value")).sendKeys("2");
-    driver.findElement(By.cssSelector("input[type=\"submit\"]")).click();
-    assertTrue(driver.findElement(By.cssSelector("h2")).getText().matches("^[\\s\\S]*2![\\s\\S]*$"));
+    driver.findElement(By.linkText("Cathedral Pics")).click();
+    assertTrue(isElementPresent(By.cssSelector("img[alt=\"Sunny Cathedral\"]")));
+    assertTrue(isElementPresent(By.cssSelector("img[alt=\"Alpenglow Cathedral\"]")));
+    assertTrue(isElementPresent(By.cssSelector("img[alt=\"Old Cathedral\"]")));
   }
 
   @After

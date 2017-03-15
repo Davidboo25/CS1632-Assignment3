@@ -11,7 +11,7 @@ public class RedditTestRunner {
 
 	// ADD ANY MORE CLASSES YOU WISH TO TEST HERE
 	
-	classesToTest.add(Testplan.class);
+	classesToTest.add(Req1TestSuite.class);
 	
 	// For all test classes added, loop through and use JUnit
 	// to run them.

@@ -1,36 +1,79 @@
-import com.thoughtworks.selenium.Selenium;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.WebDriver;
-import com.thoughtworks.selenium.webdriven.WebDriverBackedSelenium;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+
 import java.util.regex.Pattern;
-import static org.apache.commons.lang3.StringUtils.join;
+import java.util.concurrent.TimeUnit;
+import org.junit.*;
+import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
+import junit.framework.TestCase;
 
-public class Testplan {
-	private Selenium selenium;
 
-	@Before
-	public void setUp() throws Exception {
-		WebDriver driver = new HtmlUnitDriver();
-		String baseUrl = "https://cs1632ex.herokuapp.com/";
-		driver.get("https://cs1632ex.herokuapp.com/");
-	}
+public class Testplan extends TestCase{
+  private WebDriver driver;
+  private String baseUrl;
+  private boolean acceptNextAlert = true;
+  private StringBuffer verificationErrors = new StringBuffer();
 
-	@Test
-	public void testPlan() throws Exception {
-		selenium.open("/");
-		assertTrue(selenium.getText("css=div.row > p.lead").matches("^[\\s\\S]*Used for CS1632 Software Quality Assurance, taught by Bill Laboon[\\s\\S]*$"));
-		assertTrue(selenium.getText("css=p.lead").matches("^[\\s\\S]*Welcome, friend,[\\s\\S]*$"));
-		assertTrue(selenium.getText("css=p.lead").matches("^[\\s\\S]*to a land of pure calculation\\.[\\s\\S]*$"));
-	}
+  @Before
+  public void setUp() throws Exception {
+    driver = new HtmlUnitDriver();
+    baseUrl = "https://cs1632ex.herokuapp.com/";
+    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+  }
 
-	@After
-	public void tearDown() throws Exception {
-		selenium.stop();
-	}
+  @Test
+  public void testPlan() throws Exception {
+    driver.get(baseUrl + "/");
+    driver.findElement(By.linkText("Factorial")).click();
+    driver.findElement(By.name("value")).clear();
+    driver.findElement(By.name("value")).sendKeys("1");
+    driver.findElement(By.cssSelector("input[type=\"submit\"]")).click();
+    assertTrue(driver.findElement(By.cssSelector("h2")).getText().matches("^[\\s\\S]*1![\\s\\S]*$"));
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    driver.quit();
+    String verificationErrorString = verificationErrors.toString();
+    if (!"".equals(verificationErrorString)) {
+      fail(verificationErrorString);
+    }
+  }
+
+  private boolean isElementPresent(By by) {
+    try {
+      driver.findElement(by);
+      return true;
+    } catch (NoSuchElementException e) {
+      return false;
+    }
+  }
+
+  private boolean isAlertPresent() {
+    try {
+      driver.switchTo().alert();
+      return true;
+    } catch (NoAlertPresentException e) {
+      return false;
+    }
+  }
+
+  private String closeAlertAndGetItsText() {
+    try {
+      Alert alert = driver.switchTo().alert();
+      String alertText = alert.getText();
+      if (acceptNextAlert) {
+        alert.accept();
+      } else {
+        alert.dismiss();
+      }
+      return alertText;
+    } finally {
+      acceptNextAlert = true;
+    }
+  }
 }

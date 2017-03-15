@@ -1,52 +1,77 @@
-package com.example.tests;
-
-import com.thoughtworks.selenium.Selenium;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.WebDriver;
-import com.thoughtworks.selenium.webdriven.WebDriverBackedSelenium;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import junit.framework.TestCase;
 import java.util.regex.Pattern;
-import static org.apache.commons.lang3.StringUtils.join;
+import java.util.concurrent.TimeUnit;
+import org.junit.*;
+import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-/**
- * As a user,
- * I would like to see that there are 5 items in the display and that they are the correct elements.
- * This is for the Factorial Page.
- * @author David Anderson
- *
- */
 
-public class FactorialNavDisplayTest {
-	private Selenium selenium;
+public class FactorialNavDisplayTest extends TestCase{
+  private WebDriver driver;
+  private String baseUrl;
+  private boolean acceptNextAlert = true;
+  private StringBuffer verificationErrors = new StringBuffer();
 
-	// Setup the webdriver for the desired website.
-	@Before
-	public void setUp() throws Exception {
-		WebDriver driver = new FirefoxDriver();
-		String baseUrl = "https://cs1632ex.herokuapp.com/";
-		selenium = new WebDriverBackedSelenium(driver, baseUrl);
-	}
+  @Before
+  public void setUp() throws Exception {
+    driver = new HtmlUnitDriver();
+    baseUrl = "https://cs1632ex.herokuapp.com/";
+    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+  }
 
-	// Navigate to the Factorial page from the index of the website.
-	// Test that the five required links exist on the page.
-	// These links are "CS1632 D3 Home", "Factorial", "Fibonacci", "Hello", and "Cathedral Pics".
-	@Test
-	public void testFactorialNavDisplay() throws Exception {
-		selenium.open("/fact");
-		// Check that the links exist on the page.
-		assertTrue(selenium.isElementPresent("link=CS1632 D3 Home"));
-		assertTrue(selenium.isElementPresent("link=Factorial"));
-		assertTrue(selenium.isElementPresent("link=Fibonacci"));
-		assertTrue(selenium.isElementPresent("link=Hello"));
-		assertTrue(selenium.isElementPresent("link=Cathedral Pics"));
-	}
-	
-	//End
-	@After
-	public void tearDown() throws Exception {
-		selenium.stop();
-	}
+  @Test
+  public void testFactorialNavDisplay() throws Exception {
+    driver.get(baseUrl + "/fact");
+    assertTrue(isElementPresent(By.linkText("CS1632 D3 Home")));
+    assertTrue(isElementPresent(By.linkText("Factorial")));
+    assertTrue(isElementPresent(By.linkText("Fibonacci")));
+    assertTrue(isElementPresent(By.linkText("Hello")));
+    assertTrue(isElementPresent(By.linkText("Cathedral Pics")));
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    driver.quit();
+    String verificationErrorString = verificationErrors.toString();
+    if (!"".equals(verificationErrorString)) {
+      fail(verificationErrorString);
+    }
+  }
+
+  private boolean isElementPresent(By by) {
+    try {
+      driver.findElement(by);
+      return true;
+    } catch (NoSuchElementException e) {
+      return false;
+    }
+  }
+
+  private boolean isAlertPresent() {
+    try {
+      driver.switchTo().alert();
+      return true;
+    } catch (NoAlertPresentException e) {
+      return false;
+    }
+  }
+
+  private String closeAlertAndGetItsText() {
+    try {
+      Alert alert = driver.switchTo().alert();
+      String alertText = alert.getText();
+      if (acceptNextAlert) {
+        alert.accept();
+      } else {
+        alert.dismiss();
+      }
+      return alertText;
+    } finally {
+      acceptNextAlert = true;
+    }
+  }
 }

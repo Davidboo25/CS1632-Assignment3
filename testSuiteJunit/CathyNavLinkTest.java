@@ -1,67 +1,88 @@
-package com.example.tests;
 
-import com.thoughtworks.selenium.Selenium;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.WebDriver;
-import com.thoughtworks.selenium.webdriven.WebDriverBackedSelenium;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import java.util.regex.Pattern;
-import static org.apache.commons.lang3.StringUtils.join;
+import java.util.concurrent.TimeUnit;
+import org.junit.*;
+import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
+import junit.framework.TestCase;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-/**
- * As a user,
- * I would like to see that there are 5 links at the top of the Cathy page
- * and that they all direct to the correct pages.
- * @author David Anderson
- *
- */
 
-public class CathyNavLinkTest {
-	private Selenium selenium;
+public class CathyNavLinkTest extends TestCase {
+  private WebDriver driver;
+  private String baseUrl;
+  private boolean acceptNextAlert = true;
+  private StringBuffer verificationErrors = new StringBuffer();
 
-	// Setup the webdriver for the desired website.
-	@Before
-	public void setUp() throws Exception {
-		WebDriver driver = new FirefoxDriver();
-		String baseUrl = "https://cs1632ex.herokuapp.com/";
-		selenium = new WebDriverBackedSelenium(driver, baseUrl);
-	}
+  @Before
+  public void setUp() throws Exception {
+    driver = new HtmlUnitDriver();
+    baseUrl = "https://cs1632ex.herokuapp.com/";
+    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+  }
 
-	// Navigate to the Cathedral page from the index of the website.
-	// When I click each link at the top of the page,
-	// Confirm that it navigates to the correct destination. 
-	@Test
-	public void testCathyNavLink() throws Exception {
-		selenium.open("/cathy");
-		// Click each link and then verify that location is the correct one.
-		selenium.click("link=CS1632 D3 Home");
-		selenium.waitForPageToLoad("30000");
-		assertTrue(selenium.getLocation().matches("^[\\s\\S]*/$"));
-		selenium.open("/cathy");
-		selenium.click("link=Factorial");
-		selenium.waitForPageToLoad("30000");
-		assertTrue(selenium.getLocation().matches("^[\\s\\S]*/fact$"));
-		selenium.open("/cathy");
-		selenium.click("link=Fibonacci");
-		selenium.waitForPageToLoad("30000");
-		assertTrue(selenium.getLocation().matches("^[\\s\\S]*/fib$"));
-		selenium.open("/cathy");
-		selenium.click("link=Hello");
-		selenium.waitForPageToLoad("30000");
-		assertTrue(selenium.getLocation().matches("^[\\s\\S]*/hello$"));
-		selenium.open("/cathy");
-		selenium.click("link=Cathedral Pics");
-		selenium.waitForPageToLoad("30000");
-		assertTrue(selenium.getLocation().matches("^[\\s\\S]*/cathy$"));
-		selenium.open("/cathy");
-	}
+  @Test
+  public void testCathyNavLink() throws Exception {
+    driver.get(baseUrl + "/cathy");
+    driver.findElement(By.linkText("CS1632 D3 Home")).click();
+    assertTrue(driver.getCurrentUrl().matches("^[\\s\\S]*/$"));
+    driver.get(baseUrl + "/cathy");
+    driver.findElement(By.linkText("Factorial")).click();
+    assertTrue(driver.getCurrentUrl().matches("^[\\s\\S]*/fact$"));
+    driver.get(baseUrl + "/cathy");
+    driver.findElement(By.linkText("Fibonacci")).click();
+    assertTrue(driver.getCurrentUrl().matches("^[\\s\\S]*/fib$"));
+    driver.get(baseUrl + "/cathy");
+    driver.findElement(By.linkText("Hello")).click();
+    assertTrue(driver.getCurrentUrl().matches("^[\\s\\S]*/hello$"));
+    driver.get(baseUrl + "/cathy");
+    driver.findElement(By.linkText("Cathedral Pics")).click();
+    assertTrue(driver.getCurrentUrl().matches("^[\\s\\S]*/cathy$"));
+    driver.get(baseUrl + "/cathy");
+  }
 
-	// End Selenium
-	@After
-	public void tearDown() throws Exception {
-		selenium.stop();
-	}
+  @After
+  public void tearDown() throws Exception {
+    driver.quit();
+    String verificationErrorString = verificationErrors.toString();
+    if (!"".equals(verificationErrorString)) {
+      fail(verificationErrorString);
+    }
+  }
+
+  private boolean isElementPresent(By by) {
+    try {
+      driver.findElement(by);
+      return true;
+    } catch (NoSuchElementException e) {
+      return false;
+    }
+  }
+
+  private boolean isAlertPresent() {
+    try {
+      driver.switchTo().alert();
+      return true;
+    } catch (NoAlertPresentException e) {
+      return false;
+    }
+  }
+
+  private String closeAlertAndGetItsText() {
+    try {
+      Alert alert = driver.switchTo().alert();
+      String alertText = alert.getText();
+      if (acceptNextAlert) {
+        alert.accept();
+      } else {
+        alert.dismiss();
+      }
+      return alertText;
+    } finally {
+      acceptNextAlert = true;
+    }
+  }
 }

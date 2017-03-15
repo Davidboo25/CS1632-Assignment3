@@ -1,36 +1,75 @@
-package com.example.tests;
 
-import com.thoughtworks.selenium.Selenium;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.WebDriver;
-import com.thoughtworks.selenium.webdriven.WebDriverBackedSelenium;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
 import java.util.regex.Pattern;
-import static org.apache.commons.lang3.StringUtils.join;
+import java.util.concurrent.TimeUnit;
+import org.junit.*;
+import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
+import junit.framework.TestCase;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-public class FibEditable {
-	private Selenium selenium;
 
-	@Before
-	public void setUp() throws Exception {
-		WebDriver driver = new FirefoxDriver();
-		String baseUrl = "https://cs1632ex.herokuapp.com/";
-		selenium = new WebDriverBackedSelenium(driver, baseUrl);
-	}
+public class FibEditable extends TestCase{
+  private WebDriver driver;
+  private String baseUrl;
+  private boolean acceptNextAlert = true;
+  private StringBuffer verificationErrors = new StringBuffer();
 
-	@Test
-	public void testFibEditable() throws Exception {
-		selenium.open("/");
-		selenium.click("link=Fibonacci");
-		selenium.waitForPageToLoad("30000");
-		verifyTrue(selenium.isEditable("id=tb1"));
-	}
+  @Before
+  public void setUp() throws Exception {
+    driver = new HtmlUnitDriver();
+    baseUrl = "https://cs1632ex.herokuapp.com/";
+    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+  }
 
-	@After
-	public void tearDown() throws Exception {
-		selenium.stop();
-	}
+  @Test
+  public void testFibEditable() throws Exception {
+    driver.get(baseUrl + "/");
+    driver.findElement(By.linkText("Fibonacci")).click();
+    // ERROR: Caught exception [ERROR: Unsupported command [isEditable | id=tb1 | ]]
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    driver.quit();
+    String verificationErrorString = verificationErrors.toString();
+    if (!"".equals(verificationErrorString)) {
+      fail(verificationErrorString);
+    }
+  }
+
+  private boolean isElementPresent(By by) {
+    try {
+      driver.findElement(by);
+      return true;
+    } catch (NoSuchElementException e) {
+      return false;
+    }
+  }
+
+  private boolean isAlertPresent() {
+    try {
+      driver.switchTo().alert();
+      return true;
+    } catch (NoAlertPresentException e) {
+      return false;
+    }
+  }
+
+  private String closeAlertAndGetItsText() {
+    try {
+      Alert alert = driver.switchTo().alert();
+      String alertText = alert.getText();
+      if (acceptNextAlert) {
+        alert.accept();
+      } else {
+        alert.dismiss();
+      }
+      return alertText;
+    } finally {
+      acceptNextAlert = true;
+    }
+  }
 }

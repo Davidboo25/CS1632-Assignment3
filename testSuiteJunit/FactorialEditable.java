@@ -1,47 +1,74 @@
-package com.example.tests;
-
-import com.thoughtworks.selenium.Selenium;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.WebDriver;
-import com.thoughtworks.selenium.webdriven.WebDriverBackedSelenium;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import junit.framework.TestCase;
 import java.util.regex.Pattern;
-import static org.apache.commons.lang3.StringUtils.join;
+import java.util.concurrent.TimeUnit;
+import org.junit.*;
+import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
+import org.openqa.selenium.*;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-/**
- * As a user,
- * I would like to see that the textbox on the factorial page is editable.
- * @author David Anderson
- *
- */
-public class FactorialEditable {
-	private Selenium selenium;
-	
-	// Setup the webdriver for the desired website.	
-	@Before
-	public void setUp() throws Exception {
-		WebDriver driver = new FirefoxDriver();
-		String baseUrl = "https://cs1632ex.herokuapp.com/";
-		selenium = new WebDriverBackedSelenium(driver, baseUrl);
-	}
 
-	// Navigate to the Factorial page.
-	// Then verify that the input textbox is editable.
-	@Test
-	public void testFactorialEditable() throws Exception {
-		selenium.open("/");
-		// Navigate to the Factorial page.
-		selenium.click("link=Factorial");
-		selenium.waitForPageToLoad("30000");
-		// Verify that the textbox is editable.
-		assertTrue(selenium.isEditable("name=value"));
-	}
+public class FactorialEditable extends TestCase{
+  private WebDriver driver;
+  private String baseUrl;
+  private boolean acceptNextAlert = true;
+  private StringBuffer verificationErrors = new StringBuffer();
 
-	@After
-	public void tearDown() throws Exception {
-		selenium.stop();
-	}
+  @Before
+  public void setUp() throws Exception {
+    driver = new HtmlUnitDriver();
+    baseUrl = "https://cs1632ex.herokuapp.com/";
+    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+  }
+
+  @Test
+  public void testFactorialEditable() throws Exception {
+    driver.get(baseUrl + "/");
+    driver.findElement(By.linkText("Fibonacci")).click();
+    // ERROR: Caught exception [ERROR: Unsupported command [isEditable | id=tb1 | ]]
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    driver.quit();
+    String verificationErrorString = verificationErrors.toString();
+    if (!"".equals(verificationErrorString)) {
+      fail(verificationErrorString);
+    }
+  }
+
+  private boolean isElementPresent(By by) {
+    try {
+      driver.findElement(by);
+      return true;
+    } catch (NoSuchElementException e) {
+      return false;
+    }
+  }
+
+  private boolean isAlertPresent() {
+    try {
+      driver.switchTo().alert();
+      return true;
+    } catch (NoAlertPresentException e) {
+      return false;
+    }
+  }
+
+  private String closeAlertAndGetItsText() {
+    try {
+      Alert alert = driver.switchTo().alert();
+      String alertText = alert.getText();
+      if (acceptNextAlert) {
+        alert.accept();
+      } else {
+        alert.dismiss();
+      }
+      return alertText;
+    } finally {
+      acceptNextAlert = true;
+    }
+  }
 }
